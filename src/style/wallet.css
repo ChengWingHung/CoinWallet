@@ -1,0 +1,85 @@
+
+  /**  wallet content part **/
+
+  .wallet_container {
+    min-height: 100vh;
+    background-color: #f4f9ff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .wallet_content {
+    background-color: white;
+    width: 350px;
+    height: 650px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: #282c34;
+    border-radius: 3px;
+    box-shadow: 0px 5px 10px #888888;
+  }
+
+  .wallet_logout {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    font-size: 14px;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .wallet_content_header {
+    background-color: #d57e08;
+    width: 350px;
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: -269px;
+    position: absolute;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
+
+  .wallet_token_name {
+    height: 38px;
+    width: 38px;
+    border-radius: 50%;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 5px;
+    padding-top: 6px;
+    color: white;
+  }
+
+  .wallet_content_property_list {
+    position: fixed;
+    width: 330px;
+    height: 400px;
+    top: 230px;
+    overflow-y: auto;
+  }
+
+  .wallet_content_property_list .total {
+    font-size: 20px;
+    color: #d57e08;
+    width: 100%;
+    text-align: right;
+  }
+
+  .wallet_content_property_list .amout {
+    font-size: 14px;
+    width: 100%;
+    text-align: right;
+  }
+
+  .wallet_content_floor {
+    position: fixed;
+    top: 635px;
+  }
