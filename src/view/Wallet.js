@@ -74,6 +74,7 @@ function Wallet(props){
     // 点击主网，右下角列表复制地址
     let network = "https://rpc.flashbots.net";
     let provider;
+    let ethCurrentPrice;
 
     useEffect(()=>{
 
@@ -103,16 +104,17 @@ function Wallet(props){
 
         ethCountValue = ethers.utils.formatEther(ethCountValue);
         ethCountValue = ethCountValue/1000000000000000000;// 1 ETH = 18 wei;
+        ethCurrentPrice = 2300;// 当前的实时价格$2300
 
         console.log("得到的eth数量", ethCountValue);
 
         let showTokenList = [];
-        let walletBalanceValue = ethCountValue*2300;
+        let walletBalanceValue = ethCountValue*ethCurrentPrice;
 
         let ethToken = {
             "token_name":"eth",
             "token_num":ethCountValue > 0.0001?ethCountValue:0,
-            "token_amount":walletBalanceValue < 0.01?0.00:walletBalanceValue
+            "token_amount":walletBalanceValue < 0.01?'0.00':walletBalanceValue
         };
 
         showTokenList.push(ethToken);
@@ -129,11 +131,28 @@ function Wallet(props){
             resultBalanceValue = '0.00';
         } else {
 
-            if (walletBalanceValue.indexOf('.') < 0) walletBalanceValue += '.00';
+            if (walletBalanceValue.toString().indexOf('.') < 0) walletBalanceValue += '.00';
 
             // 处理千分位分割
+            let tempText = walletBalanceValue.toString().substring(0, walletBalanceValue.toString().indexOf('.'));
 
-            resultBalanceValue = '999,999,999.99';
+            if (tempText.length > 3) {
+
+                let addDotCount = 0;
+    
+                for (let i=tempText.length - 1;i>0;i--) {
+    
+                    if ((tempText.substring(i, tempText.length).length - addDotCount)%3 === 0) {
+                        tempText = tempText.substring(0, i) + ',' + tempText.substring(i, tempText.length);
+                        addDotCount++;
+                    }
+                }
+
+                resultBalanceValue = tempText + walletBalanceValue.toString().substring(walletBalanceValue.toString().indexOf('.'), walletBalanceValue.length);
+            } else {
+
+                resultBalanceValue = walletBalanceValue;
+            }
         }
 
         return '$' + resultBalanceValue;
@@ -263,7 +282,7 @@ function Wallet(props){
                         <div className='wallet_logout'>
                             <LogoutOutlined onClick={logout}/>
                         </div>
-                        <div style={{fontSize:'30px', fontWeight:'bold'}}>
+                        <div style={{fontSize:`${30 - Math.floor(showBalanceValue.length/18)*4}px`, fontWeight:'bold'}}>
                             {showBalanceValue}
                         </div>
                     </div>
