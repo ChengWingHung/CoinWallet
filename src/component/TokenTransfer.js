@@ -16,16 +16,20 @@ function TokenTransfer(props){
 
     const transferAddressChange = (e) => {
 
-        // 正则匹配字符
+        let transferAddress = e.target.value;
+        
+        transferAddress = transferAddress.toString().replace(/[^0-9a-z]/g, '');
 
-        setTransferState({...transferState, transferAddress:e.target.value});
+        setTransferState({...transferState, transferAddress});
     }
 
     const transferAmountChange = (e) => {
 
-        // 正则匹配字符
+        let transferAmount = e.target.value;
+        
+        transferAmount = transferAmount.toString().replace(/[^0-9.]/, '');
 
-        setTransferState({...transferState, transferAmount:e.target.value});
+        setTransferState({...transferState, transferAmount});
     }
 
     const transferTokenHandler = () => {
@@ -73,6 +77,14 @@ function TokenTransfer(props){
                     <Input placeholder="enter transfer amount"
                             value={transferState.transferAmount}
                             onChange={transferAmountChange}/>
+                </Col>
+            </Row>
+            <Row>
+                <Col span={6}>
+                    
+                </Col>
+                <Col span={16} className='wallet_transfer_icon' style={{textAlign:'left'}}>
+                balance：{props.ethCountValue}
                 </Col>
             </Row>
             <Row className='wallet_row_content'>

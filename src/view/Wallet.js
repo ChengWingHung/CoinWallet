@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 import WaveEffect from '../component/WaveEffect';
 import TokenTransfer from '../component/TokenTransfer';
 import Collection from '../component/Collection';
-import { Button, Row, Col, message } from 'antd';
+import { Spin, Button, Row, Col, message } from 'antd';
 import { SwapOutlined, VerticalAlignBottomOutlined, LogoutOutlined } from '@ant-design/icons';
 
 // 引入axios库进行HTTP请求
 import axios from 'axios';
+
 const { ethers } = require("ethers");
 
 function Wallet(props){
@@ -16,8 +17,9 @@ function Wallet(props){
         coin_wallet:null,
         walletAddress:'',
         ethCountValue:0,
-        walletBalanceValue:0,
+        walletBalanceValue:999999999.99,
         viewState:'list',
+        loading: false,
         tokenNameColor:[
             "#ffbd0b",
             "#ffd60b",
@@ -129,19 +131,25 @@ function Wallet(props){
 
         let ethUsdPrice = 2300;
 
+        setWalletState({...walletState, loading:true});
+
         try {
             // 发送GET请求到CoinMarketCap API
-            const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+            const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd', {
+                timeout:30000 // 设置超时时间
+            });
             
             // 从返回结果中提取ETH的USD价格
             ethUsdPrice = response.data['ethereum'].usd;
             
             console.log(`ETH的当前价格为 ${ethUsdPrice} USD`);
+            setWalletState({...walletState, loading:false});
 
             return ethUsdPrice;
         } catch (error) {
 
             console.error("获取eth价格异常", error);
+            setWalletState({...walletState, loading:false});
 
             return ethUsdPrice;
         }
@@ -199,7 +207,7 @@ function Wallet(props){
 
         // 输入数量是否大于账户余额数
         if (amount > walletState.ethCountValue) {
-            message.warning('转账金额已超出账户余额!');
+            message.warning('转账数量已超出账户余额!');
             return;
         }
 
@@ -294,12 +302,13 @@ function Wallet(props){
         // 转账界面
         propertyDetailList.push(
             <TokenTransfer key={"transferview_"+tokenIndex} walletAddress={walletState.walletAddress}
-            transferTokenHandler={transferTokenAmountHandler}/>
+            transferTokenHandler={transferTokenAmountHandler}
+            ethCountValue={walletState.ethCountValue}/>
         );
     }
 
     return (
-        <>
+        <Spin spinning={walletState.loading} tip="Loading...">
             <div className='wallet_container'>
                 <div className='wallet_content'>
                     <div className='wallet_content_header'>
@@ -337,7 +346,7 @@ function Wallet(props){
                 
             </div>
             
-        </>
+        </Spin>
     )
 }
 

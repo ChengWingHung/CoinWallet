@@ -21,7 +21,11 @@ function Login(props){
 
     const privateKeyChange = (e) => {
 
-        setLoginState({...loginState, "private_key":e.target.value});
+        let private_key = e.target.value;
+
+        private_key = private_key.toString().replace(/[^0-9a-z]/g, '');
+
+        setLoginState({...loginState, private_key});
     }
 
     const loginEthWallet = () => {
