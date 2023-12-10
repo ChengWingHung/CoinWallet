@@ -79,7 +79,7 @@ function Login(props){
                                 <KeyOutlined />&nbsp;&nbsp;
                             </Col>
                             <Col span={18}>
-                                <Input placeholder="enter your private key"
+                                <Input.Password placeholder="enter your private key"
                                     value={loginState.private_key}
                                     onChange={privateKeyChange}/>
                             </Col>

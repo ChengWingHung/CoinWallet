@@ -92,6 +92,8 @@ function Wallet(props){
 
         if (!props || !props.coinWallet || !props.coinWallet.private_key) return;
 
+        setWalletState({...walletState, loading:true});
+
         let coin_wallet = new ethers.Wallet(props.coinWallet.private_key, provider);
 
         let walletAddress = coin_wallet.signingKey.address;
