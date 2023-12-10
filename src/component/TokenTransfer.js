@@ -18,7 +18,7 @@ function TokenTransfer(props){
 
         let transferAddress = e.target.value;
         
-        transferAddress = transferAddress.toString().replace(/[^0-9a-z]/g, '');
+        transferAddress = transferAddress.toString().replace(/[^0-9a-f]/g, '');
 
         setTransferState({...transferState, transferAddress});
     }

@@ -23,7 +23,7 @@ function Login(props){
 
         let private_key = e.target.value;
 
-        private_key = private_key.toString().replace(/[^0-9a-z]/g, '');
+        private_key = private_key.toString().replace(/[^0-9a-f]/g, '');
 
         setLoginState({...loginState, private_key});
     }
@@ -32,7 +32,14 @@ function Login(props){
 
         console.log("得到的信息", loginState);
         if (loginState.login_name.trim() === '' || loginState.private_key.trim() === '') return;
-        loginWalletProcess();
+
+        if (loginState.private_key.indexOf('0x') === 0 && loginState.private_key.length === 66) {
+
+            loginWalletProcess();
+        } else if (loginState.private_key.indexOf('0x') !== 0 && loginState.private_key.length === 64) {
+
+            loginWalletProcess();
+        }
     }
 
     const clearLoginInfo = () => {

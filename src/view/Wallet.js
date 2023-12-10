@@ -345,7 +345,6 @@ function Wallet(props){
                 </div>
                 
             </div>
-            
         </Spin>
     )
 }
