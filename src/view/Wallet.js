@@ -6,6 +6,8 @@ import Collection from '../component/Collection';
 import { Button, Row, Col, message } from 'antd';
 import { SwapOutlined, VerticalAlignBottomOutlined, LogoutOutlined } from '@ant-design/icons';
 
+// 引入axios库进行HTTP请求
+import axios from 'axios';
 const { ethers } = require("ethers");
 
 function Wallet(props){
@@ -92,7 +94,7 @@ function Wallet(props){
 
         let walletAddress = coin_wallet.signingKey.address;
         
-        walletAddress = walletAddress.toLocaleLowerCase();
+        walletAddress = walletAddress.toLowerCase();
 
         console.log("得到的地址信息", walletAddress);
         getWalletBalanceByAddress(coin_wallet, walletAddress);
@@ -104,7 +106,7 @@ function Wallet(props){
 
         ethCountValue = ethers.utils.formatEther(ethCountValue);
         ethCountValue = ethCountValue/1000000000000000000;// 1 ETH = 18 wei;
-        ethCurrentPrice = 2300;// 当前的实时价格$2300
+        ethCurrentPrice = await getEthCurrentUsdtPrice();// 当前的实时价格$2300
 
         console.log("得到的eth数量", ethCountValue);
 
@@ -121,6 +123,28 @@ function Wallet(props){
 
         setWalletState({...walletState, coin_wallet, walletAddress, showTokenList, ethCountValue, walletBalanceValue});
         // setWalletState({...walletState, coin_wallet, walletAddress, ethCountValue, walletBalanceValue});
+    }
+
+    const getEthCurrentUsdtPrice = async () => {
+
+        let ethUsdPrice = 2300;
+
+        try {
+            // 发送GET请求到CoinMarketCap API
+            const response = await axios.get('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+            
+            // 从返回结果中提取ETH的USD价格
+            ethUsdPrice = response.data['ethereum'].usd;
+            
+            console.log(`ETH的当前价格为 ${ethUsdPrice} USD`);
+
+            return ethUsdPrice;
+        } catch (error) {
+
+            console.error("获取eth价格异常", error);
+
+            return ethUsdPrice;
+        }
     }
 
     const processBalanceFormat = (walletBalanceValue) => {

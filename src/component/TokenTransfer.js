@@ -38,7 +38,7 @@ function TokenTransfer(props){
 
         // 检查数量是否有效
         if (isNaN(transferState.transferAmount) || transferState.transferAmount <= 0) {
-            message.warning('转账金额无效!');
+            message.warning('转账数量无效!');
             return;
         }
 
